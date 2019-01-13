@@ -1,0 +1,11 @@
+# https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/windows-scripting/x83z1d9f(v=vs.84)
+# 
+# https://powershell.org/2013/04/powershell-popup/
+#
+#
+# Syntax for button:
+# intButton = object.Popup(strText,[nSecondsToWait],[strTitle],[nType]) 
+
+$wshell = New-Object -ComObject Wscript.Shell
+
+notify = wshShell.Popup(strText, 0, "Mailbox Accessed", 0x0 + 0x30);
