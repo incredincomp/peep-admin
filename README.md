@@ -1,6 +1,5 @@
 # peep-admin
-This is being developed for use on a Exchange 2010 server to notify SysSecAdmins when a mailbox is accessed with admin privileges. This is mostly a PowerShell project, but may need to implement a bash script/python script for the desired notification effects.
-
+This is being developed for use on a Exchange 2010 server to notify SysSecAdmins when a mailbox is accessed with admin privileges. This is a PowerShell project
 # usage
 This is an auditing/forensics tool in the basic sense. This is being developed out of the need to be able to be notified when a mailbox is accessed with administrator privileges and where and who was responsible, and for what. 
 
