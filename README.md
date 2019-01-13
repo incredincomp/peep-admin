@@ -20,8 +20,13 @@ Search-AdminAuditLog -Cmdlets
 Save/or initiate notification to required auditor for further inspection 
 
 https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/windows-scripting/x83z1d9f(v=vs.84)
+
 included in notification:
+
 cmdlet origination IP
+
 cmdlet Origin USER name or ID 
+
 MAILBOX viewed
+
 TIME and DATE of incident 
