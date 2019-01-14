@@ -6,7 +6,7 @@ This is an auditing/forensics tool in the basic sense. This is being developed o
 There shouldn’t be any specific needs from the user aside from basic server configuration, along with initial program configuration.
 This program is being developed for a single specific server instance and may need additional adjustments before working with your current implementation of your server.
 
-# flow
+# flow notes
 The general idea I have at this time-
 
 will probably be set up to run on a specific time frame to allow for constant updates/a scheduled event
