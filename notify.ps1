@@ -16,8 +16,9 @@ $Messageboxbody = "test"
 $MessageIcon = [System.Windows.MessageBoxImage]::Warning
 
 #Saves the message box result to a variable for condition checking
-#[System.Windows.MessageBox]::Show($MessageBody,$MessageTitle,$ButtonType,$MessageIcon)
+
 $result = [System.Windows.MessageBox]::Show($Messageboxbody,$MessageboxTitle,$ButtonType,$messageicon)
+
 #conditional statement to decide what is to be done with the information and if the user would like further information
 switch( $result )
 {
