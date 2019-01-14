@@ -10,17 +10,17 @@ $ButtonType = [System.Windows.MessageBoxButton]::OKCancel
 $MessageboxTitle = "Mailbox Accessed"
 
 #sets Messagebox text, will need to call a variable that will be set by main peep-admin script
-$Messageboxbody = "test"
+$MessageboxBody = "test"
 
 #sets the icon for the pop up box to an exclamation warning
 $MessageIcon = [System.Windows.MessageBoxImage]::Warning
 
 #Saves the message box result to a variable for condition checking
 
-$result = [System.Windows.MessageBox]::Show($Messageboxbody,$MessageboxTitle,$ButtonType,$messageicon)
+$Result = [System.Windows.MessageBox]::Show($MessageboxBody,$MessageboxTitle,$ButtonType,$MessageIcon)
 
 #conditional statement to decide what is to be done with the information and if the user would like further information
-switch( $result )
+switch( $Result )
 {
 	OK     { $ShowMore }
 	Cancel { break     }
