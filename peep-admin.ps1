@@ -10,6 +10,29 @@ $Results = Search-AdminAuditLog - Cmdlets <cmdlet 1, cmdlet 2, ...> -Parameters 
 #$Results[4].CmdletParameters
 #$Results[4].ModifiedProperties
 
+#Copy
+
+#Create
+
+#FolderBind
+
+#HardDelete
+
+#MailboxLogin
+
+#MessageBind
+
+#Move
+
+#MoveToDeletedItems
+
+#SendAs
+
+#SendOnBehalf
+
+#SoftDelete
+
+#Update
 
 
 
