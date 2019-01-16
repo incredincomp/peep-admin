@@ -12,7 +12,8 @@ Param (
 function New-Search 
 {
 
-Search-AdminAuditLog -cmdlets * #need to finish this command to match scope
+$searchresults = Search-AdminAuditLog -cmdlets * -DomainController * -Paramaters * | $searchresults 
+#need to finish this command to match scope
 <#Search-AdminAuditLog
       [[-Cmdlets <MultiValuedProperty>]
       [-DomainController <Fqdn>]
