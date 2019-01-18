@@ -12,7 +12,7 @@ Param (
 function New-Search 
 {
 
-$searchresults = Search-AdminAuditLog -cmdlets * -DomainController * -Paramaters * | $searchresults 
+$searchresults = Search-AdminAuditLog -Operations Set-AdminAuditLogConfig,  -DomainController * -Paramaters * | $searchresults 
 #need to finish this command to match scope
 <#Search-AdminAuditLog
       [[-Cmdlets <MultiValuedProperty>]
@@ -26,6 +26,18 @@ $searchresults = Search-AdminAuditLog -cmdlets * -DomainController * -Paramaters
       [-StartIndex <Int32>]
       [-UserIds <MultiValuedProperty>]
       [-ExternalAccess <$true | $false>]
+      [<CommonParameters>]
+####      
+Search-MailboxAuditLog
+      [-Mailboxes <MultiValuedProperty>]
+      [-DomainController <Fqdn>]
+      [-EndDate <ExDateTime>]
+      [-ExternalAccess <$true | $false>]
+      [-HasAttachments <$true | $false>]
+      [-LogonTypes <MultiValuedProperty>]
+      [-Operations <MultiValuedProperty>]
+      [-ResultSize <Int32>]
+      [-StartDate <ExDateTime>]
       [<CommonParameters>]
 #>
 }
