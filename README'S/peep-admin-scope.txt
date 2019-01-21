@@ -1,6 +1,6 @@
 Scope
 1.What cmdlets would you like notified of.
-2.What paramaters would you like attached to each of those cmdlets
+2.What parameters would you like attached to each of those cmdlets
 3.FQDN for Domain Controller
 4.Will you want the program to give you futher information about the notification  if you click a certain button on the notify?
 5.do you want the program to save the notifications for logging, if so, how and where?
