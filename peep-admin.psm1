@@ -7,11 +7,14 @@ Param (
 		ValueFromPipelineByPropertyName=$true)
 	]
 	$SearchResults,
-	global.$DisplayNotify
+	$DisplayNotify
+	$ResultSet
 )
 
 
-$SearchResults = Search-AdminAuditLog -Operations Set-AdminAuditLogConfig,  -DomainController * -Paramaters * | $SearchResults 
+$SearchContent = Search-AdminAuditLog -Cmdlets set-mailbox, -IsSuccess $true -UserIds *
+$SearchResults = $SearchContent
+
 #need to finish this command to match scope
 <#Search-AdminAuditLog
       [[-Cmdlets <MultiValuedProperty>]
@@ -41,12 +44,18 @@ Search-MailboxAuditLog
 #>
 
 function global.DisplayNotify {
+	Param(
+	[parameter(Mandatory=$true,
+    ValueFromPipeline=$true)]
+	[String[]]
+	$ResultSet
+	)
 #this adds pop up functionality with Add-Type to add the PresentationFramework from Microsoft system files
     Add-Type -AssemblyName PresentationCore,PresentationFramework
 
       $ButtonType = [System.Windows.MessageBoxButton]::OKCancel #Generates a button that says ok for acknowledgement
       $MessageboxTitle = "Mailbox Accessed" #Sets Messagebox Title
-      $MessageboxBody = "$ResultSet" #sets Messagebox text as $ResultSet
+      $MessageboxBody = "$ResultSet[3] `n$ResultSet[0] `n$ResultSet[4] `n$ResultSet[1] `n$ResultSet[2]" #sets Messagebox text as $ResultSet via array objects
       $MessageIcon = [System.Windows.MessageBoxImage]::Warning #sets the icon for the pop up box to an exclamation warning
       $Notify = [System.Windows.MessageBox]::Show($MessageboxBody,$MessageboxTitle,$ButtonType,$MessageIcon) 
   #Saves the message box result to a variable for condition checking
@@ -167,10 +176,10 @@ End {
 		global.$ResultSet = $ResultSet
 			switch ( $ResultSet )
 			$ResultSet.Count -eq 0 ( break )	
-			$ResultSet.Count -gt 0 ( $ResultSet | $DisplayNotify )
+			$ResultSet.Count -gt 0 ( $DisplayNotify <#& send logs into a file for incase you miss notify?#> )
 
 }
-}
+
 
 
 <#
