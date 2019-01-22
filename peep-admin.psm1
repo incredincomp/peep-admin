@@ -7,7 +7,7 @@ Param (
 		ValueFromPipelineByPropertyName=$true)
 	]
 	$SearchResults,
-	$DisplayNotify
+	global.$DisplayNotify
 )
 
 
@@ -167,7 +167,7 @@ End {
 		global.$ResultSet = $ResultSet
 			switch ( $ResultSet )
 			$ResultSet.Count -eq 0 ( break )	
-			$ResultSet.Count -gt 0 ( $DisplayNotify )
+			$ResultSet.Count -gt 0 ( $ResultSet | $DisplayNotify )
 
 }
 }
