@@ -1,3 +1,4 @@
+<#function peep-admin {#>
 Param (
 	[Parameter(
 		Position=0,
@@ -6,11 +7,9 @@ Param (
 		ValueFromPipelineByPropertyName=$true)
 	]
 	$SearchResults,
-	[switch]$ResolveCaller,
+	$DisplayNotify
 )
 
-function New-Search 
-{
 
 $SearchResults = Search-AdminAuditLog -Operations Set-AdminAuditLogConfig,  -DomainController * -Paramaters * | $SearchResults 
 #need to finish this command to match scope
@@ -40,7 +39,24 @@ Search-MailboxAuditLog
       [-StartDate <ExDateTime>]
       [<CommonParameters>]
 #>
+
+function global.DisplayNotify {
+#this adds pop up functionality with Add-Type to add the PresentationFramework from Microsoft system files
+    Add-Type -AssemblyName PresentationCore,PresentationFramework
+
+      $ButtonType = [System.Windows.MessageBoxButton]::OKCancel #Generates a button that says ok for acknowledgement
+      $MessageboxTitle = "Mailbox Accessed" #Sets Messagebox Title
+      $MessageboxBody = "$ResultSet" #sets Messagebox text as $ResultSet
+      $MessageIcon = [System.Windows.MessageBoxImage]::Warning #sets the icon for the pop up box to an exclamation warning
+      $Notify = [System.Windows.MessageBox]::Show($MessageboxBody,$MessageboxTitle,$ButtonType,$MessageIcon) 
+  #Saves the message box result to a variable for condition checking
+      [console]::beep(1000,1) #triggers a tone to tag along with notification box
+      switch( $Notify ){ #conditional statement if the user would like further information       
+            OK     { $ShowMore }
+	        Cancel { break     }
+      } 
 }
+
 
 Begin {
 	
@@ -51,8 +67,9 @@ Begin {
 	# Set the counter to 1
 	$i = 1
 	
-	# If resolveCaller is called it can take much longer to run so notify the user of that
-	if ($ResolveCaller){Write-Warning "ResolveCaller specified; Script will take significantly longer to run as it attemps to resolve the primary SMTP address of each calling user.  Progress updates will be provided every 25 entries."}
+	<# Obsolete
+	If resolveCaller is called it can take much longer to run so notify the user of that
+	if ($ResolveCaller){Write-Warning "ResolveCaller specified; Script will take significantly longer to run as it attemps to resolve the primary SMTP address of each calling user.  Progress updates will be provided every 25 entries."}#>
 }
 
 Process {
@@ -65,27 +82,21 @@ Process {
 		
 		# Get the alias of the User that ran the command
 		$user = ($_.caller.split("/"))[-1]
-		
-		# If we used resolve caller then try to resolve the primary SMTP address of the calling user
-		if ($ResolveCaller){
 			
-			# attempt to resolve the recipient
-			[string]$Recipient = (get-recipient $user -erroraction silentlycontinue).primarysmtpaddress
+		# attempt to resolve the recipient
+		[string]$Recipient = (get-recipient $user -erroraction silentlycontinue)primarysmtpaddress
 			
 			# if we get a result then put that in the output otherwise do nothing
 			If (!([string]::IsNullOrEmpty($Recipient))){$user = $Recipient}
 			
-			# Since this is going to take longer to run provide status every 25 entries
-			if ($i%25 -eq 0){Write-Host "Processed 25 Results"}
-			$i++
-		}
+		
 		
 		# Build the command that was run
-		$switches = $_.cmdletparameters
+		$cmdltsran = $_.cmdletparameters
 		[string]$FullCommand = $_.cmdletname
 		
 		# Get all of the switches and add them in "human" form to the output
-		foreach ($parameter in $switches){
+		foreach ($parameter in $cmdltsran){
 							
 			# Format our values depending on what they are so that they are as close
 			# a match as possible for what would have been entered
@@ -144,37 +155,24 @@ Process {
 		$Result | Add-Member -MemberType NoteProperty -Value $ObjModified -Name ObjectModified
 		
 		# Add the object to the array to be returned
-		$global.ResultSet = $ResultSet + $Result
+		global.$ResultSet = $ResultSet + $Result
 		
 	}
 }
 
 # Final steps
-
-function global.DisplayNotify {
-#this adds pop up functionality with Add-Type to add the PresentationFramework from Microsoft system files
-    Add-Type -AssemblyName PresentationCore,PresentationFramework
-
-      $ButtonType = [System.Windows.MessageBoxButton]::OKCancel #Generates a button that says ok for acknowledgement
-      $MessageboxTitle = "Mailbox Accessed" #Sets Messagebox Title
-      $MessageboxBody = "$ResultSet" #sets Messagebox text as $ResultSet
-      $MessageIcon = [System.Windows.MessageBoxImage]::Warning #sets the icon for the pop up box to an exclamation warning
-      $Notify = [System.Windows.MessageBox]::Show($MessageboxBody,$MessageboxTitle,$ButtonType,$MessageIcon) 
-  #Saves the message box result to a variable for condition checking
-      [console]::beep(1000,1) #triggers a tone to tag along with notification box
-      switch( $Notify ){ #conditional statement if the user would like further information       
-            OK     { $ShowMore }
-	        Cancel { break     }
-      } 
-}
 End {
-	# Return the array set
-	Return $ResultSet
-	if ($ResultSet -eq $null)
-	{ break }
-	else 
-	{ global.$ResultSet | global:$DisplayNotify }
+		# Return the array set
+		Return global.$ResultSet
+		global.$ResultSet = $ResultSet
+			switch ( $ResultSet )
+			$ResultSet.Count -eq 0 ( break )	
+			$ResultSet.Count -gt 0 ( $DisplayNotify )
+
 }
+}
+
+
 <#
  
 .SYNOPSIS
@@ -191,11 +189,7 @@ Modification.
 .PARAMETER SeachResults
 Output of the Search-AdminAuditLog. Either stored in a variable or pipelined
 into the script.
-.PARAMETER ResolveCaller
-Attempts to resolve the alias of the person who ran the command into the 
-primary SMTP address.
-.PARAMETER Agree
-Verifies you have read and agree to the disclaimer at the top of the script file
+
 .OUTPUTS
 Creates an output that contains the following information:
 Caller         : Person who ran the command
