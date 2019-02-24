@@ -1,5 +1,8 @@
 # peep-admin
 This is being developed for use on a Exchange 2010 server to notify SysSecAdmins when a mailbox is accessed with admin privileges. This was started as a simple PowerShell project on 1/11/19 by ~incredincomp
+
+I am currently bumped up agaisnt a debugging wall and if you have any experience running this in your enviroment, please let me know how it went. 
+
 # usage
 This is an auditing/forensics tool in the basic sense. This is being developed out of the need to be able to be notified when a mailbox is accessed with administrator privileges and where and who was responsible, and for what. 
 
